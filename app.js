@@ -6,7 +6,7 @@ const passwordInput = document.querySelector('input[name="password"]');
 const fileInput = document.querySelector('input[name="my-file"]');
 const msgP = document.getElementById('msg');
 
-function ckFormData(e) {
+async function ckFormData(e) {
   e.preventDefault();
   const formData = new FormData(form);
 
@@ -15,7 +15,13 @@ function ckFormData(e) {
   const file = fileInput.files;
 
   if (nameValid(name) && passValid(password) && fileValid(file)) {
-    console.log(123);
+    const res = await fetch('insert.php', {
+      method: 'post',
+      body: formData,
+    });
+    const data = await res.text();
+
+    console.log(data);
   }
 }
 

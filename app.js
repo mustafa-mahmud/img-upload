@@ -24,7 +24,7 @@ async function ckFormData(e) {
     console.log(data);
     if (data.includes('successfully')) {
       nameInput.value = passwordInput.value = fileInput.value = '';
-      giveMeMsg('green', data);
+      giveMeMsg('green', 'Data save successfully.');
     }
   }
 }
@@ -93,7 +93,7 @@ function giveMeMsg(color, msg) {
   msgP.textContent = msg;
 
   setTimeout(() => {
-    msgP.style.display = 'block';
+    msgP.style.display = 'none';
   }, 1000);
 }
 

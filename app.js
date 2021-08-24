@@ -22,6 +22,10 @@ async function ckFormData(e) {
     const data = await res.text();
 
     console.log(data);
+    if (data.includes('successfully')) {
+      nameInput.value = passwordInput.value = fileInput.value = '';
+      giveMeMsg('green', data);
+    }
   }
 }
 
@@ -87,6 +91,10 @@ function giveMeMsg(color, msg) {
   msgP.style.display = 'block';
   msgP.style.color = color;
   msgP.textContent = msg;
+
+  setTimeout(() => {
+    msgP.style.display = 'block';
+  }, 1000);
 }
 
 //////////////

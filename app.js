@@ -5,6 +5,7 @@ const nameInput = document.querySelector('input[name="name"]');
 const passwordInput = document.querySelector('input[name="password"]');
 const fileInput = document.querySelector('input[name="my-file"]');
 const msgP = document.getElementById('msg');
+const table = document.querySelector('table');
 
 async function ckFormData(e) {
   e.preventDefault();
@@ -25,6 +26,7 @@ async function ckFormData(e) {
     if (data.includes('successfully')) {
       nameInput.value = passwordInput.value = fileInput.value = '';
       giveMeMsg('green', 'Data save successfully.');
+      diplayUI();
     }
   }
 }
@@ -95,6 +97,31 @@ function giveMeMsg(color, msg) {
   setTimeout(() => {
     msgP.style.display = 'none';
   }, 1000);
+}
+
+async function diplayUI() {
+  const res = await fetch('read.php');
+  let data = await res.text();
+  data = JSON.parse(data);
+
+  if (data) {
+    data.forEach((val, ind) => {
+      const html = `
+					<tr>
+						<td>${ind + 1}</td>
+						<td>${val.name}</td>
+						<td>${val.pass.slice(0, 7).padEnd(10, '.')}</td>
+						<td><img src="uploads/${val.img}" width="60" height="40" />
+						</td>
+						<td data-set="${
+              val.id
+            }"><span id="edit">Edit</span> | <span id="del">Delete</span></td>
+					</tr>
+			`;
+
+      table.insertAdjacentHTML('beforeend', html);
+    });
+  }
 }
 
 //////////////

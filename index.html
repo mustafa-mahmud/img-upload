@@ -9,6 +9,13 @@
 		<noscript>
 			<h3>You have no JAVASCIPT, Please Enable JAVASCRIPT</h3>
 		</noscript>
+
+		<style>
+			#edit,
+			#del {
+				cursor: pointer;
+			}
+		</style>
 	</head>
 
 	<body>
@@ -22,6 +29,27 @@
 			<input type="submit" value="submit" />
 		</form>
 		<p id="msg"></p>
+
+		<div class="container">
+			<table border="1">
+				<tr>
+					<th>Id</th>
+					<th>Name</th>
+					<th>Password</th>
+					<th>Image</th>
+					<th>Actions</th>
+				</tr>
+				<!-- <tr>
+					<td>1</td>
+					<td>Maria Anders</td>
+					<td>adf456466...</td>
+					<td><img src="uploads/6124ea31ece925.7919377885f19b9e6ba2e605c4ddf119c2820acd.jpeg" width="60" height="40" />
+					</td>
+					<td data-set="1"><span id="edit">Edit</span> | <span id="del">Delete</span></td>
+				</tr> -->
+			</table>
+		</div>
+
 		<script src="app.js"></script>
 	</body>
 

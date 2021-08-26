@@ -95,16 +95,25 @@ function giveMeMsg(color, msg) {
   msgP.textContent = msg;
 
   setTimeout(() => {
-    msgP.style.display = 'none';
+    msgP.style.color = 'transparent';
   }, 1000);
 }
 
 async function diplayUI() {
   const res = await fetch('read.php');
-  let data = await res.text();
-  data = JSON.parse(data);
-
+  let data = await res.json();
   if (data) {
+    table.innerHTML = '';
+
+    table.innerHTML = `
+			<tr>
+					<th>Id</th>
+					<th>Name</th>
+					<th>Password</th>
+					<th>Image</th>
+					<th>Actions</th>
+				</tr>
+		`;
     data.forEach((val, ind) => {
       const html = `
 					<tr>
@@ -113,9 +122,11 @@ async function diplayUI() {
 						<td>${val.pass.slice(0, 7).padEnd(10, '.')}</td>
 						<td><img src="uploads/${val.img}" width="60" height="40" />
 						</td>
-						<td data-set="${
-              val.id
-            }"><span id="edit">Edit</span> | <span id="del">Delete</span></td>
+						<td data-set="${val.id}"><span onclick="editUser(${
+        val.id
+      })" id="edit">Edit</span> | <span onclick="deleteUser(${
+        val.id
+      })" id="del">Delete</span></td>
 					</tr>
 			`;
 
@@ -124,5 +135,29 @@ async function diplayUI() {
   }
 }
 
+async function deleteUser(id) {
+  const greement = confirm('Do you want to delete?');
+
+  if (!greement) return;
+
+  const res = await fetch('delete.php', {
+    method: 'post',
+    body: id,
+    headers: {
+      'Content-type': 'application/html',
+    },
+  });
+
+  const data = await res.text();
+  console.log(data);
+
+  if (data.includes('successfully')) {
+    diplayUI();
+    giveMeMsg('green', 'User deleted successfully');
+  }
+}
+
 //////////////
+diplayUI();
+
 form.addEventListener('submit', ckFormData);

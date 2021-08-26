@@ -36,7 +36,7 @@ function nameValid(name) {
     if (name.length >= 2) {
       const patterns = /^[a-zA-Z]+$/g;
       if (patterns.test(name)) {
-        msgP.style.display = 'none';
+        msgP.style.color = 'transparent';
         return true;
       } else {
         giveMeMsg('red', 'Name must be valid name');
@@ -54,7 +54,7 @@ function passValid(pass) {
     if (pass.length >= 3) {
       const patterns = /^[a-zA-Z0-9]+$/g;
       if (patterns.test(pass)) {
-        msgP.style.display = 'none';
+        msgP.style.color = 'transparent';
         return true;
       } else {
         giveMeMsg('red', 'Password must be filled');
@@ -69,7 +69,7 @@ function passValid(pass) {
 
 function fileValid(file) {
   if (file.length === 0) return giveMeMsg('red', 'Pls put an image');
-  msgP.style.display = 'none';
+  msgP.style.color = 'transparent';
 
   const size = file[0].size;
   const type = file[0].type;
@@ -79,7 +79,7 @@ function fileValid(file) {
 
   if (validType.includes(typeName)) {
     if (size < 3000000) {
-      msgP.style.display = 'none';
+      msgP.style.color = 'transparent';
       return true;
     } else {
       giveMeMsg('red', 'Image size must be in 3mbs');
@@ -90,7 +90,6 @@ function fileValid(file) {
 }
 
 function giveMeMsg(color, msg) {
-  msgP.style.display = 'block';
   msgP.style.color = color;
   msgP.textContent = msg;
 
@@ -122,11 +121,9 @@ async function diplayUI() {
 						<td>${val.pass.slice(0, 7).padEnd(10, '.')}</td>
 						<td><img src="uploads/${val.img}" width="60" height="40" />
 						</td>
-						<td data-set="${val.id}"><span onclick="editUser(${
-        val.id
-      })" id="edit">Edit</span> | <span onclick="deleteUser(${
-        val.id
-      })" id="del">Delete</span></td>
+						<td data-set="${
+              val.id
+            }"><span onclick="editUser(event)" id="edit">Edit</span> | <span onclick="deleteUser(event)" id="del">Delete</span></td> 
 					</tr>
 			`;
 
@@ -135,16 +132,22 @@ async function diplayUI() {
   }
 }
 
-async function deleteUser(id) {
+async function deleteUser(event) {
+  const id = event.target.closest('td').getAttribute('data-set');
+  const src = event.target
+    .closest('tr')
+    .querySelector('img')
+    .getAttribute('src');
+
   const greement = confirm('Do you want to delete?');
 
   if (!greement) return;
 
   const res = await fetch('delete.php', {
     method: 'post',
-    body: id,
+    body: JSON.stringify({ id, src }),
     headers: {
-      'Content-type': 'application/html',
+      'Content-type': 'application/json',
     },
   });
 
